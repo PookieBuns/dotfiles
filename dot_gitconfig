@@ -1,0 +1,7 @@
+[credential]
+	helper = /mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe
+[user]
+	name = allenyuchen
+	email = allenyuchen@hotmail.com
+[pull]
+	rebase = false
