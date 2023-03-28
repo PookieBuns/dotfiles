@@ -29,3 +29,4 @@ fi
 # add go to path
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:~/go/bin
+export PATH=$PATH:~/nvim-linux64/bin

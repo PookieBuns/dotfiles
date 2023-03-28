@@ -1,5 +1,4 @@
 set nocompatible
-syntax enable
 set number relativenumber
 set mouse=a
 set cursorline
@@ -17,37 +16,46 @@ set wildmenu
 set encoding=utf8
 set updatetime=300
 set ffs=unix,dos,mac
-set clipboard=unnamed
 set hidden
-set foldlevel=99
-set foldmethod=indent
+
+let g:mapleader = ' '
 
 " Install vim-plug if not found
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin()
 
 Plug 'tpope/vim-fugitive'
-Plug 'preservim/nerdtree'
-Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'arcticicestudio/nord-vim'
 Plug 'joshdick/onedark.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'tmhedberg/SimpylFold'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'vim-python/python-syntax'
 Plug 'tomasiser/vim-code-dark'
-" Plug 'cjrh/vim-conda'
 Plug 'jiangmiao/auto-pairs'
+Plug 'Vimjas/vim-python-pep8-indent'
+if has('nvim')
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
+    Plug 'nvim-tree/nvim-web-devicons'
+    Plug 'nvim-tree/nvim-tree.lua'
+    Plug 'nvim-lualine/lualine.nvim'
+    Plug 'akinsho/bufferline.nvim', { 'tag': 'v3.*' }
+    Plug 'lukas-reineke/indent-blankline.nvim'
+else
+    Plug 'preservim/nerdtree'
+    Plug 'Xuyuanp/nerdtree-git-plugin'
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-python/python-syntax'
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+    Plug 'junegunn/fzf.vim'
+endif
 
 call plug#end()
 
@@ -63,12 +71,17 @@ else
     endif
 endif
 
-set undodir=~/.vim/.undo//
-set backupdir=~/.vim/.backup//
-set directory=~/.vim/.swp//
+if has("nvim")
+    set undodir=~/tmp/nvim//
+    set backupdir=~/tmp/nvim//
+    set directory=~/tmp/nvim//
+else
+    set undodir=~/tmp/vim//
+    set backupdir=~/tmp/vim//
+    set directory=~/tmp/vim//
+endif
 
 let g:python_highlight_all = 1
-" let g:pyindent_open_paren=shiftwidth()
 
 " You can split the window in Vim by typing :split or :vsplit.
 " Navigate the split view easier by pressing CTRL+j, CTRL+k, CTRL+h, or CTRL+l.
@@ -84,7 +97,7 @@ noremap <c-down> <c-w>-
 noremap <c-left> <c-w>>
 noremap <c-right> <c-w><
 
-" Map previous and next buffers and tabs using ] and [
+" Map previous and next buffers and tabs using [ and ]
 nmap ]b :bnext<CR>
 nmap [b :bprevious<CR>
 nmap ]t :tabnext<CR>
@@ -93,7 +106,7 @@ nmap ]q :cnext<CR>
 nmap [q :cprevious<CR>
 
 " Enable folding with the spacebar
-nnoremap <space> za
+" nnoremap <space> za
 
 imap jk <Esc>
 
@@ -104,28 +117,6 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
-" Vim Airline
-let g:airline#extensions#tabline#enabled = 1
-
-" NERDTree specific mappings.
-" Map the F3 key to toggle NERDTree open and close.
-nnoremap <F3> :NERDTreeToggle<cr>
-
-autocmd StdinReadPre * let s:std_in=1
-" open a terminal if no file arguments are present
-" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | execute("below terminal ++rows=10") | wincmd p | endif
-" Start NERDTree when Vim is started without file arguments.
-" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-" autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    " \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-" Close the tab if NERDTree is the only window remaining in it.
-" autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-" Close the tab if terminal is the only window remaining in it.
-" autocmd BufEnter * if winnr('$') == 1 && &buftype == 'terminal' | quit! | endif
-let g:NERDTreeQuitOnOpen=1
-let NERDTreeShowBookmarks=1
-
 " WSL yank support
 let s:clip = '/mnt/c/Windows/System32/clip.exe'  " default location
 if executable(s:clip)
@@ -135,25 +126,29 @@ if executable(s:clip)
     augroup END
 endif
 
+" Vim Airline
+let g:airline#extensions#tabline#enabled = 1
+
+" CoC
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: There's always complete item selected by default, you may want to enable
 " no select by `"suggest.noselect": true` in your configuration file.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
+            \ coc#pum#visible() ? coc#pum#next(1) :
+            \ CheckBackspace() ? "\<Tab>" :
+            \ coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice.
 inoremap <silent><expr> <CR> coc#pum#visible() && coc#pum#info()['index'] != -1 ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use `[g` and `]g` to navigate diagnostics
@@ -178,7 +173,99 @@ autocmd Filetype python setlocal makeprg=python\ %
 autocmd FileType python map <buffer> <F9> :w<CR>:make!<CR>
 autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:make!<CR>
 
-" <F4> to change conda environment
-let g:conda_startup_msg_suppress = 1
-map <F4> :CondaChangeEnv<CR>"
-map <F4> :CondaChangeEnv<CR>
+" Treesitter
+if has('nvim')
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+    -- A list of parser names, or "all" (the five listed parsers should always be installed)
+    ensure_installed = { "c", "lua", "vim", "help", "query", "python" },
+
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = false,
+
+    -- List of parsers to ignore installing (for "all")
+    ignore_install = {},
+
+    ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+    -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+
+    highlight = {
+        enable = true,
+
+        -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+        disable = function(lang, buf)
+            local max_filesize = 100 * 1024 -- 100 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+                return true
+            end
+        end,
+
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
+}
+EOF
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
+else
+    set foldmethod=indent
+endif
+set nofoldenable
+
+" Telescope
+if has('nvim')
+    " Find files using Telescope command-line sugar.
+    nnoremap <leader>ff <cmd>Telescope find_files<cr>
+    nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+    nnoremap <leader>fb <cmd>Telescope buffers<cr>
+    nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+lua << EOF
+require('telescope').setup {
+  defaults = {
+    mappings = {
+      i = {
+        ['<C-j>'] = 'move_selection_next',
+        ['<C-k>'] = 'move_selection_previous',
+      },
+    },
+  },
+}
+EOF
+endif
+
+" NERDTree/Nvim-Tree
+if has('nvim')
+lua << EOF
+require('nvim-tree').setup {}
+EOF
+    nnoremap <F3> :NvimTreeToggle<cr>
+else
+    " NERDTree specific mappings.
+    " Map the F3 key to toggle NERDTree open and close.
+    nnoremap <F3> :NERDTreeToggle<cr>
+    let g:NERDTreeQuitOnOpen=1
+    let NERDTreeShowBookmarks=1
+endif
+
+" LuaLine
+if has('nvim')
+lua << EOF
+require('lualine').setup {}
+EOF
+endif
+
+" BufferLine
+if has('nvim')
+lua << EOF
+require('bufferline').setup {}
+EOF
+endif
