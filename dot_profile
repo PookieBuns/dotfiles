@@ -26,7 +26,10 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# add go to path
+# go
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:~/go/bin
+
+# neovim
 export PATH=$PATH:~/nvim-linux64/bin
+alias vim="nvim"

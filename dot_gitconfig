@@ -5,3 +5,5 @@
 	email = allenyuchen@hotmail.com
 [pull]
 	rebase = false
+[diff]
+	tool = nvimdiff3

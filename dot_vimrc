@@ -1,5 +1,6 @@
 set nocompatible
 set number relativenumber
+set signcolumn=yes
 set mouse=a
 set cursorline
 set cursorcolumn
@@ -23,8 +24,8 @@ let g:mapleader = ' '
 " Install vim-plug if not found
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin()
@@ -39,6 +40,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tomasiser/vim-code-dark'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'easymotion/vim-easymotion'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'rbong/vim-flog'
+Plug 'mbbill/undotree'
 if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-lua/plenary.nvim'
@@ -48,6 +53,9 @@ if has('nvim')
     Plug 'nvim-lualine/lualine.nvim'
     Plug 'akinsho/bufferline.nvim', { 'tag': 'v3.*' }
     Plug 'lukas-reineke/indent-blankline.nvim'
+    Plug 'mfussenegger/nvim-dap'
+    Plug 'rcarriga/nvim-dap-ui'
+    Plug 'github/copilot.vim'
 else
     Plug 'preservim/nerdtree'
     Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -110,6 +118,13 @@ nmap [q :cprevious<CR>
 
 imap jk <Esc>
 
+map <leader>l $
+map <leader>h 0
+command! -nargs=0 W :w
+command! -nargs=0 Q :q
+tnoremap <leader>jk <C-\><C-n>
+tnoremap <leader><Esc> <C-\><C-n>
+
 " highlight extra whitespaces
 highlight link ExtraWhitespace Error
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
@@ -126,8 +141,44 @@ if executable(s:clip)
     augroup END
 endif
 
+" Session Management
+if argc() == 0 && !empty(glob('./Session.vim'))
+    source ./Session.vim
+endif
+
+autocmd Vimleave * mks! Session.vim
+
+" easymotion
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+" move to 2char (vim-sneak)
+nmap s <Plug>(easymotion-overwin-f2)
+" replace search
+map  / <Plug>(easymotion-sn)
+" move to 1char
+nmap <Leader><Leader>f <Plug>(easymotion-overwin-f)
+nmap <Leader><Leader>L <Plug>(easymotion-overwin-line)
+nmap <Leader><Leader>w <Plug>(easymotion-overwin-w)
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+" gitgutter
+let g:gitgutter_map_keys = 0
+nmap <leader>gh <Plug>(GitGutterPreviewHunk)
+nmap ]c <Plug>(GitGutterNextHunk)
+nmap [c <Plug>(GitGutterPrevHunk)
+
 " Vim Airline
 let g:airline#extensions#tabline#enabled = 1
+
+" copilot
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+
+" undotree
+nnoremap <leader>u :UndotreeToggle<CR>
 
 " CoC
 " Use tab for trigger completion with characters ahead and navigate.
@@ -158,9 +209,35 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gv :vsplit<CR> <C-l> gd
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> gh :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Applying code actions to the selected code block
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying code actions at the cursor position
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+
+" Add (Neo)Vim's native statusline support
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocActionAsync('format')
 " Add `:Fold` command to fold current buffer.
@@ -168,10 +245,26 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 
+" Create a function to open a neovim terminal in a small split window and run python
+function! OpenTerminal(arg="")
+    if empty(a:arg)
+        exec "botright ".winheight(0)/4."split | terminal"
+        exec "startinsert"
+    else
+        exec "botright ".winheight(0)/4."split | terminal" a:arg
+    endif
+endfunction
+
 " <F9> to run python file in terminal
-autocmd Filetype python setlocal makeprg=python\ %
-autocmd FileType python map <buffer> <F9> :w<CR>:make!<CR>
-autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:make!<CR>
+" autocmd Filetype python setlocal makeprg=python\ %
+autocmd FileType python map <buffer> <F9> :w<CR>:call OpenTerminal("python %") <CR>
+autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:call OpenTerminal("python %") <CR>
+
+" always open terminal in a bottom split
+command! -nargs=? Term :call OpenTerminal(<f-args>)
+
+" remap <Exc> to exit terminal mode
+tnoremap <Esc> <C-\><C-n>
 
 " Treesitter
 if has('nvim')
@@ -245,7 +338,13 @@ endif
 " NERDTree/Nvim-Tree
 if has('nvim')
 lua << EOF
-require('nvim-tree').setup {}
+require('nvim-tree').setup {
+    actions = {
+        open_file = {
+            quit_on_open = true
+        }
+    }
+}
 EOF
     nnoremap <F3> :NvimTreeToggle<cr>
 else
@@ -266,6 +365,93 @@ endif
 " BufferLine
 if has('nvim')
 lua << EOF
-require('bufferline').setup {}
+require('bufferline').setup {
+    options = {
+        numbers = "buffer_id",
+        offsets = {
+            {
+                filetype = "NvimTree",
+                text = "File Explorer",
+                highlight = "Directory",
+                separator =true
+            }
+        },
+        diagnostics = "coc",
+        diagnostics_indicator = function(count, level, diagnostics_dict, context)
+          local icon = level:match("error") and " " or " "
+          return "" .. icon
+        end
+    },
+}
+EOF
+endif
+
+" Nvim-dap
+if has('nvim')
+    nnoremap <F5> :lua require'dap'.continue()<cr>
+    nnoremap <F10> :lua require'dap'.step_over()<cr>
+    nnoremap <F11> :lua require'dap'.step_into()<cr>
+    nnoremap <F12> :lua require'dap'.step_out()<cr>
+    nnoremap <leader>b :lua require'dap'.toggle_breakpoint()<cr>
+    noremap <leader>dr :lua require'dap'.repl.open()<cr> <c-w>j
+    nnoremap <leader>dt :lua require'dap'.terminate()<cr>
+    sign define DapBreakpoint text=● texthl=WarningMsg
+lua << EOF
+local dap, dapui = require("dap"), require("dapui")
+dapui.setup {
+    layouts = { {
+        elements = { {
+            id = "breakpoints",
+            size = 0.25
+          }, {
+            id = "stacks",
+            size = 0.25
+          }, {
+            id = "watches",
+            size = 0.25
+          }, {
+            id = "scopes",
+            size = 0.25
+          } },
+        position = "left",
+        size = 40
+      }, {
+        elements = { {
+            id = "console",
+            size = 1
+          } },
+        position = "bottom",
+        size = 10
+      } },
+}
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+  dap.repl.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+  dap.repl.close()
+end
+
+dap.adapters.python = {
+  type = 'executable';
+  command = '/home/allenyuchen/miniconda3/bin/python';
+  args = { '-m', 'debugpy.adapter' };
+}
+dap.configurations.python = {
+  {
+    type = 'python';
+    request = 'launch';
+    name = "Launch file";
+    program = "${file}";
+    pythonPath = function()
+      return 'python'
+    end;
+    console = 'integratedTerminal'
+  },
+}
 EOF
 endif
