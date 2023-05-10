@@ -31,5 +31,8 @@ export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:~/go/bin
 
 # neovim
-export PATH=$PATH:~/nvim-linux64/bin
+export PATH=$PATH:~/nvim/squashfs-root/usr/bin
 alias vim="nvim"
+
+# code-minimap
+export PATH=$PATH:~/code-minimap

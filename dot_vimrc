@@ -37,38 +37,54 @@ Plug 'joshdick/onedark.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'tomasiser/vim-code-dark'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'easymotion/vim-easymotion'
-Plug 'vim-scripts/ReplaceWithRegister'
+" Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'rbong/vim-flog'
 Plug 'mbbill/undotree'
+Plug 'direnv/direnv.vim'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'tomasiser/vim-code-dark'
+Plug 'dstein64/vim-startuptime'
+Plug 'wfxr/minimap.vim', { 'on': 'MinimapToggle' }
 if has('nvim')
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
+    Plug 'nvim-telescope/telescope-project.nvim'
     Plug 'nvim-tree/nvim-web-devicons'
     Plug 'nvim-tree/nvim-tree.lua'
     Plug 'nvim-lualine/lualine.nvim'
-    Plug 'akinsho/bufferline.nvim', { 'tag': 'v3.*' }
+    Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
     Plug 'lukas-reineke/indent-blankline.nvim'
     Plug 'mfussenegger/nvim-dap'
     Plug 'rcarriga/nvim-dap-ui'
+    Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+    Plug 'Mofiqul/vscode.nvim'
+    " requires vim9.0
     Plug 'github/copilot.vim'
 else
-    Plug 'preservim/nerdtree'
+    Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
     Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-python/python-syntax'
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
+    Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 endif
 
 call plug#end()
 
 set termguicolors
-colorscheme codedark
+colorscheme catppuccin-mocha
+" if has_key(plugs,'vscode.nvim')
+"     colorscheme vscode
+" else
+"     colorscheme codedark
+" endif
 
 if has("vms")
     set nobackup      " do not keep a backup file, use versions instead
@@ -102,8 +118,8 @@ nnoremap <c-l> <c-w>l
 " CTRL+UP, CTRL+DOWN, CTRL+LEFT, or CTRL+RIGHT.
 noremap <c-up> <c-w>+
 noremap <c-down> <c-w>-
-noremap <c-left> <c-w>>
-noremap <c-right> <c-w><
+noremap <c-left> <c-w><
+noremap <c-right> <c-w>>
 
 " Map previous and next buffers and tabs using [ and ]
 nmap ]b :bnext<CR>
@@ -113,8 +129,8 @@ nmap [t :tabprevious<CR>
 nmap ]q :cnext<CR>
 nmap [q :cprevious<CR>
 
-" Enable folding with the spacebar
-" nnoremap <space> za
+" Enable folding with the equals sign
+nnoremap = za
 
 imap jk <Esc>
 
@@ -125,12 +141,15 @@ command! -nargs=0 Q :q
 tnoremap <leader>jk <C-\><C-n>
 tnoremap <leader><Esc> <C-\><C-n>
 
+" enable folding for git commits
+au FileType git set fdm=syntax
+
 " highlight extra whitespaces
-highlight link ExtraWhitespace Error
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+" highlight link ExtraWhitespace Error
+" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+" autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+" autocmd BufWinLeave * call clearmatches()
 
 " WSL yank support
 let s:clip = '/mnt/c/Windows/System32/clip.exe'  " default location
@@ -146,7 +165,7 @@ if argc() == 0 && !empty(glob('./Session.vim'))
     source ./Session.vim
 endif
 
-autocmd Vimleave * mks! Session.vim
+" autocmd Vimleave * mks! Session.vim
 
 " easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -179,6 +198,12 @@ let g:copilot_no_tab_map = v:true
 
 " undotree
 nnoremap <leader>u :UndotreeToggle<CR>
+
+" minimap
+" let g:minimap_width = 10
+" let g:minimap_auto_start = 1
+" let g:minimap_auto_start_win_enter = 1
+nnoremap <F4> :MinimapToggle<cr>
 
 " CoC
 " Use tab for trigger completion with characters ahead and navigate.
@@ -244,6 +269,8 @@ command! -nargs=0 Format :call CocActionAsync('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+" Add `:CocShowOutput` command to format current buffer.
+command! -nargs=0 CocShowOutput :CocCommand workspace.showOutput
 
 " Create a function to open a neovim terminal in a small split window and run python
 function! OpenTerminal(arg="")
@@ -267,7 +294,7 @@ command! -nargs=? Term :call OpenTerminal(<f-args>)
 tnoremap <Esc> <C-\><C-n>
 
 " Treesitter
-if has('nvim')
+if has_key(plugs, 'nvim-treesitter')
 lua << EOF
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
@@ -315,12 +342,16 @@ endif
 set nofoldenable
 
 " Telescope
-if has('nvim')
+if has_key(plugs,'telescope.nvim')
     " Find files using Telescope command-line sugar.
     nnoremap <leader>ff <cmd>Telescope find_files<cr>
     nnoremap <leader>fg <cmd>Telescope live_grep<cr>
     nnoremap <leader>fb <cmd>Telescope buffers<cr>
     nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+    nnoremap <leader>fp <cmd>lua require'telescope'.extensions.project.project{ display_type = 'full' }<cr>
+    " let CocRestart execute last
+    " autocmd VimEnter * autocmd DirChanged * 1sleep
+    " autocmd VimEnter * autocmd DirChanged * CocRestart
 lua << EOF
 require('telescope').setup {
   defaults = {
@@ -331,22 +362,41 @@ require('telescope').setup {
       },
     },
   },
+  extensions = {
+    project = {
+      base_dirs = {
+        '~/sp',
+        '~/deploy',
+      },
+      sync_with_nvim_tree = true,
+    },
+  },
 }
+require('telescope').load_extension('project')
 EOF
+else
+    nnoremap <leader>ff <cmd>Files <cr>
+    nnoremap <leader>fg <cmd>Rg <cr>
 endif
 
 " NERDTree/Nvim-Tree
-if has('nvim')
+if has_key(plugs,'nvim-tree.lua')
+    " lazy load nvim-tree
+    function! ToggleTree()
+        if !exists(':NvimTreeToggle')
 lua << EOF
 require('nvim-tree').setup {
     actions = {
         open_file = {
             quit_on_open = true
         }
-    }
+    },
 }
 EOF
-    nnoremap <F3> :NvimTreeToggle<cr>
+        endif
+        NvimTreeToggle
+    endfunction
+    nnoremap <F3> :call ToggleTree()<cr>
 else
     " NERDTree specific mappings.
     " Map the F3 key to toggle NERDTree open and close.
@@ -356,14 +406,14 @@ else
 endif
 
 " LuaLine
-if has('nvim')
+if has_key(plugs,'lualine.nvim')
 lua << EOF
 require('lualine').setup {}
 EOF
 endif
 
 " BufferLine
-if has('nvim')
+if has_key(plugs,'bufferline.nvim')
 lua << EOF
 require('bufferline').setup {
     options = {
@@ -387,7 +437,7 @@ EOF
 endif
 
 " Nvim-dap
-if has('nvim')
+if has_key(plugs,'nvim-dap')
     nnoremap <F5> :lua require'dap'.continue()<cr>
     nnoremap <F10> :lua require'dap'.step_over()<cr>
     nnoremap <F11> :lua require'dap'.step_into()<cr>
