@@ -1,7 +1,9 @@
 {
     "python.formatting.provider": "black",
     "python.linting.flake8Enabled": true,
+    "python.linting.ruffEnabled": true,
     "pyright.organizeimports.provider": "isort",
     "python.linting.mypyEnabled": true,
-    "python.analysis.typeCheckingMode": "off"
+    "python.analysis.typeCheckingMode": "off",
+    "coc.preferences.formatOnSave": true,
 }

@@ -79,12 +79,11 @@ endif
 call plug#end()
 
 set termguicolors
-colorscheme catppuccin-mocha
-" if has_key(plugs,'vscode.nvim')
-"     colorscheme vscode
-" else
-"     colorscheme codedark
-" endif
+if has_key(plugs,'vscode.nvim')
+    colorscheme catppuccin-mocha
+else
+    colorscheme catppuccin_mocha
+endif
 
 if has("vms")
     set nobackup      " do not keep a backup file, use versions instead
@@ -140,6 +139,7 @@ command! -nargs=0 W :w
 command! -nargs=0 Q :q
 tnoremap <leader>jk <C-\><C-n>
 tnoremap <leader><Esc> <C-\><C-n>
+nmap <leader>o :only<CR>
 
 " enable folding for git commits
 au FileType git set fdm=syntax
@@ -200,9 +200,7 @@ let g:copilot_no_tab_map = v:true
 nnoremap <leader>u :UndotreeToggle<CR>
 
 " minimap
-" let g:minimap_width = 10
-" let g:minimap_auto_start = 1
-" let g:minimap_auto_start_win_enter = 1
+let g:minimap_git_colors = 1
 nnoremap <F4> :MinimapToggle<cr>
 
 " CoC
