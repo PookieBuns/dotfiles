@@ -50,6 +50,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'tomasiser/vim-code-dark'
 Plug 'dstein64/vim-startuptime'
 Plug 'wfxr/minimap.vim', { 'on': 'MinimapToggle' }
+Plug 'takac/vim-hardtime'
+Plug 'unblevable/quick-scope'
 if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
     Plug 'nvim-lua/plenary.nvim'
@@ -104,8 +106,6 @@ else
     set directory=~/tmp/vim//
 endif
 
-let g:python_highlight_all = 1
-
 " You can split the window in Vim by typing :split or :vsplit.
 " Navigate the split view easier by pressing CTRL+j, CTRL+k, CTRL+h, or CTRL+l.
 nnoremap <c-j> <c-w>j
@@ -134,7 +134,11 @@ nnoremap = za
 imap jk <Esc>
 
 map <leader>l $
-map <leader>h 0
+map <leader>h ^
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzz
+nnoremap N Nzz
 command! -nargs=0 W :w
 command! -nargs=0 Q :q
 tnoremap <leader>jk <C-\><C-n>
@@ -143,13 +147,6 @@ nmap <leader>o :only<CR>
 
 " enable folding for git commits
 au FileType git set fdm=syntax
-
-" highlight extra whitespaces
-" highlight link ExtraWhitespace Error
-" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-" autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-" autocmd BufWinLeave * call clearmatches()
 
 " WSL yank support
 let s:clip = '/mnt/c/Windows/System32/clip.exe'  " default location
@@ -166,6 +163,9 @@ if argc() == 0 && !empty(glob('./Session.vim'))
 endif
 
 " autocmd Vimleave * mks! Session.vim
+
+" python-syntax
+let g:python_highlight_all = 1
 
 " easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -202,6 +202,11 @@ nnoremap <leader>u :UndotreeToggle<CR>
 " minimap
 let g:minimap_git_colors = 1
 nnoremap <F4> :MinimapToggle<cr>
+
+" hardtime
+let g:hardtime_default_on = 1
+let g:hardtime_ignore_buffer_patterns = [ "fugitive" ]
+let g:hardtime_maxcount = 2
 
 " CoC
 " Use tab for trigger completion with characters ahead and navigate.
