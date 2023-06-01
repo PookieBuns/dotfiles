@@ -18,6 +18,7 @@ set encoding=utf8
 set updatetime=300
 set ffs=unix,dos,mac
 set hidden
+set clipboard=unnamedplus
 
 let g:mapleader = ' '
 
@@ -46,6 +47,7 @@ Plug 'mbbill/undotree'
 Plug 'direnv/direnv.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
+Plug 'kana/vim-textobj-indent'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tomasiser/vim-code-dark'
 Plug 'dstein64/vim-startuptime'
@@ -54,6 +56,7 @@ Plug 'takac/vim-hardtime'
 Plug 'unblevable/quick-scope'
 if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+    Plug 'nvim-treesitter/nvim-treesitter-context'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.1' }
     Plug 'nvim-telescope/telescope-project.nvim'
@@ -149,12 +152,27 @@ nmap <leader>o :only<CR>
 au FileType git set fdm=syntax
 
 " WSL yank support
-let s:clip = '/mnt/c/Windows/System32/clip.exe'  " default location
-if executable(s:clip)
-    augroup WSLYank
-        autocmd!
-        autocmd TextYankPost * call system(s:clip, join(v:event.regcontents, "\<CR>"))
-    augroup END
+if has("nvim")
+    let g:clipboard = {
+        \   'name': 'win32yank-wsl',
+        \   'copy': {
+        \      '+': 'win32yank.exe -i --crlf',
+        \      '*': 'win32yank.exe -i --crlf',
+        \    },
+        \   'paste': {
+        \      '+': 'win32yank.exe -o --lf',
+        \      '*': 'win32yank.exe -o --lf',
+        \   },
+        \   'cache_enabled': 0,
+        \ }
+else
+    let s:clip = '/mnt/c/Windows/System32/clip.exe'  " default location
+    if executable(s:clip)
+        augroup WSLYank
+            autocmd!
+            autocmd TextYankPost * call system(s:clip, join(v:event.regcontents, "\<CR>"))
+        augroup END
+    endif
 endif
 
 " Session Management
@@ -163,6 +181,11 @@ if argc() == 0 && !empty(glob('./Session.vim'))
 endif
 
 " autocmd Vimleave * mks! Session.vim
+
+" nvim python provider
+if has("nvim")
+    let g:python3_host_prog = expand('~/miniconda3/bin/python')
+endif
 
 " python-syntax
 let g:python_highlight_all = 1
@@ -371,6 +394,7 @@ require('telescope').setup {
         '~/sp',
         '~/deploy',
       },
+      search_by = 'path',
       sync_with_nvim_tree = true,
     },
   },
@@ -506,5 +530,12 @@ dap.configurations.python = {
     console = 'integratedTerminal'
   },
 }
+EOF
+endif
+
+" context
+if has_key(plugs,'nvim-treesitter-context')
+lua << EOF
+require('treesitter-context').setup {}
 EOF
 endif
