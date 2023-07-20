@@ -36,3 +36,6 @@ alias vim="nvim"
 
 # code-minimap
 export PATH=$PATH:~/code-minimap
+
+# rust
+. "$HOME/.cargo/env"

@@ -54,6 +54,8 @@ Plug 'dstein64/vim-startuptime'
 Plug 'wfxr/minimap.vim', { 'on': 'MinimapToggle' }
 Plug 'takac/vim-hardtime'
 Plug 'unblevable/quick-scope'
+Plug 'iamcco/markdown-preview.nvim' " :call mkdp#util#install()
+Plug 'img-paste-devs/img-paste.vim'
 if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
     Plug 'nvim-treesitter/nvim-treesitter-context'
@@ -229,7 +231,10 @@ nnoremap <F4> :MinimapToggle<cr>
 " hardtime
 let g:hardtime_default_on = 1
 let g:hardtime_ignore_buffer_patterns = [ "fugitive" ]
-let g:hardtime_maxcount = 2
+let g:hardtime_maxcount = 5
+
+" imgpaste
+autocmd FileType markdown nmap <buffer><silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
 
 " CoC
 " Use tab for trigger completion with characters ahead and navigate.
@@ -324,7 +329,7 @@ if has_key(plugs, 'nvim-treesitter')
 lua << EOF
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
-    ensure_installed = { "c", "lua", "vim", "help", "query", "python" },
+    ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python" },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,
@@ -391,8 +396,6 @@ require('telescope').setup {
   extensions = {
     project = {
       base_dirs = {
-        '~/sp',
-        '~/deploy',
       },
       search_by = 'path',
       sync_with_nvim_tree = true,
@@ -527,7 +530,8 @@ dap.configurations.python = {
     pythonPath = function()
       return 'python'
     end;
-    console = 'integratedTerminal'
+    console = 'integratedTerminal';
+    cwd = vim.fn.getcwd();
   },
 }
 EOF

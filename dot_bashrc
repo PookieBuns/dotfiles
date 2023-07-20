@@ -142,8 +142,8 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # redirect to clash
-host_ip=$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " ")
-export ALL_PROXY="http://$host_ip:7890"
+# host_ip=$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " ")
+# export ALL_PROXY="http://$host_ip:7890"
 
 # direnv
 show_virtual_env() {
@@ -155,3 +155,6 @@ show_virtual_env() {
 export -f show_virtual_env
 PS1='$(show_virtual_env)'$PS1
 eval "$(direnv hook bash)"
+
+# rust
+. "$HOME/.cargo/env"
