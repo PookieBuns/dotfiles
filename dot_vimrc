@@ -238,6 +238,7 @@ let g:hardtime_maxcount = 5
 autocmd FileType markdown nmap <buffer><silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
 
 " CoC
+let g:coc_global_extensions = ['coc-json', 'coc-prettier', 'coc-pyright', 'coc-rust-analyzer']
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: There's always complete item selected by default, you may want to enable
 " no select by `"suggest.noselect": true` in your configuration file.
@@ -330,7 +331,7 @@ if has_key(plugs, 'nvim-treesitter')
 lua << EOF
 require'nvim-treesitter.configs'.setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
-    ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python" },
+    ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python", "rust" },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,
