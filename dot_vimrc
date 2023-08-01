@@ -103,13 +103,13 @@ else
 endif
 
 if has("nvim")
-    set undodir=~/tmp/nvim//
-    set backupdir=~/tmp/nvim//
-    set directory=~/tmp/nvim//
+    set undodir=~/.vim/backup/nvim//
+    set backupdir=~/.vim/backup/nvim//
+    set directory=~/.vim/backup/nvim//
 else
-    set undodir=~/tmp/vim//
-    set backupdir=~/tmp/vim//
-    set directory=~/tmp/vim//
+    set undodir=~/.vim/backup/vim//
+    set backupdir=~/.vim/backup/vim//
+    set directory=~/.vim/backup/vim//
 endif
 
 " You can split the window in Vim by typing :split or :vsplit.
