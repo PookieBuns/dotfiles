@@ -331,6 +331,9 @@ endfunction
 autocmd FileType python map <buffer> <F9> :w<CR>:call OpenTerminal("python %") <CR>
 autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:call OpenTerminal("python %") <CR>
 
+" Allow wrap in markdown files
+autocmd FileType markdown set wrap linebreak spell
+
 " always open terminal in a bottom split
 command! -nargs=? Term :call OpenTerminal(<f-args>)
 
@@ -349,7 +352,7 @@ require'nvim-treesitter.configs'.setup {
 
     -- Automatically install missing parsers when entering buffer
     -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
+    auto_install = true,
 
     -- List of parsers to ignore installing (for "all")
     ignore_install = {},
@@ -375,6 +378,12 @@ require'nvim-treesitter.configs'.setup {
         -- Using this option may slow down your editor, and you may see some duplicate highlights.
         -- Instead of true it can also be a list of languages
         additional_vim_regex_highlighting = false,
+    },
+
+    -- tsx ftplugin does not exist so it doesn't turn on smartindent
+    indent = {
+        enable = true,
+        disable = {},
     },
 }
 EOF
