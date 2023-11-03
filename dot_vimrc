@@ -1,7 +1,7 @@
 set nocompatible
 set number relativenumber
 set signcolumn=yes
-set mouse=a
+" set mouse=a
 set cursorline
 set cursorcolumn
 set colorcolumn=88
@@ -334,6 +334,7 @@ autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:call OpenTerminal("python
 
 " Allow wrap in markdown files
 autocmd FileType markdown set wrap linebreak spell
+autocmd FileType text set wrap linebreak spell
 
 " always open terminal in a bottom split
 command! -nargs=? Term :call OpenTerminal(<f-args>)
@@ -566,3 +567,26 @@ lua << EOF
 require('treesitter-context').setup {}
 EOF
 endif
+
+" Format selected block of HTML code
+" autocmd FileType rust noremap <leader>f /html!<cr>f{di{i<cr><esc>O<esc>pvi{:! npx prettier --parser babel --tab-width 4 --stdin-filepath<cr>vi{<esc>xvi{>
+
+" command! FormatHtml call s:FormatHtmlInRust()
+
+" function! s:FormatHtmlInRust()
+"     " Search for 'html!' and move to the next '{'
+"     call search('html!', 'c')
+"     " Delete inside braces
+"     normal! f{di{
+"     " Enter insert mode and add a newline
+"     normal! i
+"     " Go back to normal mode, open a new line above the current one, and paste the deleted content
+"     normal! O
+"     normal! p
+"     " " Format the content inside the braces with prettier
+"     normal! vi{
+"     '<,'>!npx prettier --parser babel --tab-width 4 --stdin-filepath %
+"     " " Additional commands
+"     normal! vi{x
+"     normal! vi{
+" endfunction

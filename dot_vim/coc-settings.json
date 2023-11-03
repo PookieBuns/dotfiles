@@ -5,4 +5,5 @@
     "pyright.organizeimports.provider": "isort",
     "python.linting.mypyEnabled": true,
     "python.analysis.typeCheckingMode": "off",
+    "sql.database": "postgresql",
 }
