@@ -420,6 +420,7 @@ require('telescope').setup {
   extensions = {
     project = {
       base_dirs = {
+          '~/projects',
       },
       search_by = 'path',
       sync_with_nvim_tree = true,
@@ -440,6 +441,7 @@ if has_key(plugs,'nvim-tree.lua')
         if !exists(':NvimTreeToggle')
 lua << EOF
 require('nvim-tree').setup {
+    sync_root_with_cwd = true,
     actions = {
         open_file = {
             quit_on_open = true
