@@ -6,4 +6,7 @@
     "python.linting.mypyEnabled": true,
     "python.analysis.typeCheckingMode": "off",
     "sql.database": "postgresql",
+    "rust-analyzer.check.command": "clippy",
+    "diagnostic.virtualText": true,
+    "diagnostic.virtualTextCurrentLineOnly": false,
 }

@@ -57,6 +57,7 @@ Plug 'takac/vim-hardtime'
 Plug 'unblevable/quick-scope'
 Plug 'iamcco/markdown-preview.nvim' " :call mkdp#util#install()
 Plug 'img-paste-devs/img-paste.vim'
+Plug 'sainnhe/gruvbox-material'
 if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
     Plug 'nvim-treesitter/nvim-treesitter-context'
@@ -88,7 +89,8 @@ call plug#end()
 
 set termguicolors
 if has_key(plugs,'vscode.nvim')
-    colorscheme catppuccin-mocha
+    let g:gruvbox_material_diagnostic_virtual_text = 'colored'
+    colorscheme gruvbox-material
 else
     colorscheme catppuccin_mocha
 endif
@@ -446,6 +448,9 @@ require('nvim-tree').setup {
         open_file = {
             quit_on_open = true
         }
+    },
+    diagnostics = {
+        enable = true,
     },
 }
 EOF
