@@ -164,3 +164,6 @@ eval "$(direnv hook bash)"
 
 # rust
 . "$HOME/.cargo/env"
+
+# vi mode
+set -o vi
