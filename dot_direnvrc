@@ -1,5 +1,6 @@
 layout_conda() {
-  local ACTIVATE="${HOME}/miniconda/bin/activate"
+  local ACTIVATE="${CONDA_PREFIX}/bin/activate"
+
   if [ -n "$1" ]; then
     # Explicit environment name from layout command.
     local env_name="$1"
