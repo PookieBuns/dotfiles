@@ -23,10 +23,23 @@ return {
 					end, opts)
 					vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
 					vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
-					vim.keymap.set("n", "]g", vim.diagnostic.goto_next, opts)
-					vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, opts)
 					vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+					-- diagnostics
+					vim.diagnostic.config({
+						float = {
+							source = "always",
+						},
+					})
+					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+					vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+					vim.keymap.set("n", "<leader>d", function()
+						if has_telescope then
+							telescope.diagnostics({ bufnr = 0 })
+						else
+							vim.diagnostic.setloclist()
+						end
+					end, opts)
 				end,
 			})
 			local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")

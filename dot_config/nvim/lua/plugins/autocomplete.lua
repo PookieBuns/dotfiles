@@ -40,9 +40,6 @@ return {
 					-- use Enter to confirm selection
 					["<CR>"] = cmp.mapping.confirm({ select = true }),
 				}),
-				experimental = {
-					ghost_text = false,
-				},
 			})
 		end,
 	},
