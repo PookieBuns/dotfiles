@@ -1,9 +1,9 @@
 vim.g.mapleader = " "
-vim.keymap.set("i","jk","<Esc>")
+vim.keymap.set("i", "jk", "<Esc>")
 
 -- miscellaneous
-vim.keymap.set({"n","v","o"}, "<leader>l", "$")
-vim.keymap.set({"n","v","o"}, "<leader>h", "^")
+vim.keymap.set({ "n", "v", "o" }, "<leader>l", "$")
+vim.keymap.set({ "n", "v", "o" }, "<leader>h", "^")
 
 -- Resize split windows using arrow keys by pressing:
 -- CTRL+UP, CTRL+DOWN, CTRL+LEFT, or CTRL+RIGHT.
@@ -20,5 +20,5 @@ vim.keymap.set("n", "]b", "<cmd>bnext<CR>")
 vim.keymap.set("n", "=", "za")
 
 -- Fat finger prevention
-vim.api.nvim_create_user_command('W', 'w', {})
-vim.api.nvim_create_user_command('Q', 'q', {})
+vim.api.nvim_create_user_command("W", "w", {})
+vim.api.nvim_create_user_command("Q", "q", {})

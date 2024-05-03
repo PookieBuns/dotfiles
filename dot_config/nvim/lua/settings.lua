@@ -20,7 +20,7 @@ vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Undo
 vim.opt.swapfile = false
@@ -35,7 +35,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.wildmenu = true
 
 -- Show preview of replace
-vim.opt.inccommand = 'split'
+vim.opt.inccommand = "split"
 
 -- Unsure but in kickstart.lua
 vim.opt.breakindent = true
