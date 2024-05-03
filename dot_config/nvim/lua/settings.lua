@@ -7,10 +7,12 @@ vim.opt.colorcolumn = "88"
 vim.opt.signcolumn = "yes"
 vim.opt.wrap = false
 vim.opt.scrolloff = 10
+-- lualine already shows mode
+vim.opt.showmode = false
 
 -- Indentation
 -- vim.opt.shiftwidth = 4
--- vim.opt.tabstop = 4
+vim.opt.tabstop = 4
 -- vim.opt.expandtab = true
 
 -- Search
