@@ -1,0 +1,22 @@
+# color support
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# ls
+alias ls='ls --color=auto -hF'
+alias ll='ls -al'
+alias la='ls -A'
+alias l='ls -C'
+
+# safety features
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -I'
+alias ln='ln -i'
+
+# vim
+alias vim='nvim'
