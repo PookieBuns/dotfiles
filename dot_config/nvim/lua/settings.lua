@@ -39,3 +39,21 @@ vim.opt.inccommand = "split"
 
 -- Unsure but in kickstart.lua
 vim.opt.breakindent = true
+
+-- clipboard
+local win32yank_path = '/mnt/c/Program Files/win32yank-x64/win32yank.exe'
+if vim.env.WSL_DISTRO_NAME then
+    vim.g.clipboard = {
+        name = 'win32yank-wsl',
+        copy = {
+            ['+'] = {win32yank_path, '-i', '--crlf'},
+            ['*'] = {win32yank_path, '-i', '--crlf'},
+        },
+        paste = {
+            ['+'] = {win32yank_path, '-o', '--lf'},
+            ['*'] = {win32yank_path, '-o', '--lf'},
+        },
+        cache_enabled = 0,
+    }
+end
+
