@@ -1,0 +1,9 @@
+[credential]
+	{{- if eq (env "WSL_DISTRO_NAME") "" }}
+	helper = /usr/local/share/gcm-core/git-credential-manager
+	{{- else }}
+	helper = "/mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe"
+	{{ end }}
+[user]
+	name = allenyuchen
+	email = allenyuchen@hotmail.com
