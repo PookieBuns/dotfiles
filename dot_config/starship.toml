@@ -1,8 +1,5 @@
 format = '$all$shlvl$character'
 
-[direnv]
-disabled = false
-
 [shlvl]
 disabled = false
 format = '[$symbol]($style)'

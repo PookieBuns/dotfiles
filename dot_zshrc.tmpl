@@ -20,6 +20,10 @@ export NVM_DIR="$HOME/.nvm"
 
 # direnv
 eval "$(direnv hook zsh)"
+# ensure compatibility tmux <-> direnv
+if [ -n "$TMUX" ] && [ -n "$DIRENV_DIR" ]; then
+    direnv reload
+fi
 
 # aliases
 if [ -f ~/.aliases ]; then
