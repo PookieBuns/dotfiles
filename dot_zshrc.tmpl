@@ -25,10 +25,22 @@ if [ -n "$TMUX" ] && [ -n "$DIRENV_DIR" ]; then
     direnv reload
 fi
 
+# allow extended modifier keys in tmux
+if [ -n "$TMUX" ]; then
+    printf '\033[>4;1m'
+fi
+
 # aliases
 if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
+
+# zsh-autosuggestions
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# this is the ctrl-enter binding
+bindkey '3;5u' autosuggest-accept
+# for some reason tmux swallows the 3
+bindkey ';5u' autosuggest-accept
 
 # starship
 eval "$(starship init zsh)"
