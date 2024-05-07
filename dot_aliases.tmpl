@@ -22,12 +22,10 @@ alias ln='ln -i'
 alias vim='nvim'
 
 # proxy
-# if wsl
-if [ -n "$WSL_DISTRO_NAME" ]; then
-	host_ip=$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " ")
-	alias proxy = 'export ALL_PROXY=http://$(host_ip):7890'
-	alias unproxy = 'unset ALL_PROXY'
-else
-    alias proxy='export ALL_PROXY=http://127.0.0.1:7890'
-    alias unproxy='unset ALL_PROXY'
-fi
+{{- if eq (env "WSL_DISTRO_NAME") "" }}
+alias proxy='export ALL_PROXY=http://127.0.0.1:7890'
+{{- else }}
+host_ip=$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " ")
+alias proxy = 'export ALL_PROXY=http://$(host_ip):7890'
+{{ end }}
+alias unproxy = 'unset ALL_PROXY'
