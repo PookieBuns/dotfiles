@@ -6,7 +6,7 @@ return {
 			{ "williamboman/mason.nvim", config = true },
 			"williamboman/mason-lspconfig.nvim",
 			-- neovim config support
-			{ "folke/neodev.nvim",       config = true },
+			{ "folke/neodev.nvim", config = true },
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
