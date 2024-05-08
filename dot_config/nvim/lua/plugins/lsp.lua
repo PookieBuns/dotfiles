@@ -7,6 +7,7 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			-- neovim config support
 			{ "folke/neodev.nvim", config = true },
+			{ "j-hui/fidget.nvim", config = true },
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -49,7 +50,6 @@ return {
 				vim.lsp.protocol.make_client_capabilities(),
 				has_cmp and cmp_nvim_lsp.default_capabilities() or {}
 			)
-			require("mason").setup()
 			require("mason-lspconfig").setup({
 				ensure_installed = { "lua_ls", "rust_analyzer", "pyright" },
 				handlers = {
