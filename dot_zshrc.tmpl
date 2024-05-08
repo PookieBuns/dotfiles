@@ -27,7 +27,7 @@ fi
 
 # allow extended modifier keys in tmux
 if [ -n "$TMUX" ]; then
-    printf '\033[>4;1m'
+    precmd() { printf '\033[>4;1m' }
 fi
 
 # aliases
