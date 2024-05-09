@@ -35,6 +35,11 @@ if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
 
+# Save commad history
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
 # zsh-autosuggestions
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # this is the ctrl-enter binding
