@@ -1,6 +1,15 @@
 return {
 	-- git commands
-	"tpope/vim-fugitive",
+	{
+		"tpope/vim-fugitive",
+		config = function()
+			vim.cmd(
+				'command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Completed G ' ..
+				'exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>) ' ..
+				'| only'
+			)
+		end
+	},
 	-- git gutter
 	{
 		"lewis6991/gitsigns.nvim",
