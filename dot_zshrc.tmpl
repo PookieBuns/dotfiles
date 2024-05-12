@@ -47,5 +47,11 @@ bindkey '3;5u' autosuggest-accept
 # for some reason tmux swallows the 3
 bindkey ';5u' autosuggest-accept
 
+# fzf
+eval "$(fzf --zsh)"
+
+# zoxide
+eval "$(zoxide init zsh)"
+
 # starship
 eval "$(starship init zsh)"

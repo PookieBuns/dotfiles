@@ -29,3 +29,6 @@ host_ip=$(cat /etc/resolv.conf | grep "nameserver" | cut -f 2 -d " ")
 alias proxy="export ALL_PROXY=http://${host_ip}:7890"
 {{- end }}
 alias unproxy='unset ALL_PROXY'
+
+# use zoxide for cd
+alias cd='z'
