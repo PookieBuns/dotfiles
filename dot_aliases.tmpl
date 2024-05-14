@@ -30,5 +30,16 @@ alias proxy="export ALL_PROXY=http://${host_ip}:7890"
 {{- end }}
 alias unproxy='unset ALL_PROXY'
 
-# use zoxide for cd
+# zoxide
 alias cd='z'
+
+# sesh
+sesh() {
+  if [[ "$1" == "connect" && -z "$2" ]] || [[ -z "$1" ]]; then
+    # Run the composed command to select an item and connect
+    command sesh connect $(sesh list -i | fzf --ansi | awk '{print $2}')
+  else
+    # Pass all other arguments to the sesh command
+    command sesh "$@"
+  fi
+}

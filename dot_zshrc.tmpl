@@ -49,6 +49,28 @@ bindkey ';5u' autosuggest-accept
 
 # fzf
 eval "$(fzf --zsh)"
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+_fzf_compgen_path() {
+    fd "$1"
+}
+
+_fzf_compgen_dir() {
+    fd --type=d "$1"
+}
+
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+    export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+  esac
+}
 
 # zoxide
 eval "$(zoxide init zsh)"
