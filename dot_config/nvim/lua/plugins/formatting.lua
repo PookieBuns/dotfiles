@@ -7,6 +7,7 @@ return {
 		formatters_by_ft = {
 			lua = { "stylua" },
 			python = { "isort", "black" },
+			sh = { "shfmt" },
 		},
 		log_level = vim.log.levels.INFO,
 		notify_on_error = true,
