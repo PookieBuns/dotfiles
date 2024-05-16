@@ -8,6 +8,7 @@ return {
 			lua = { "stylua" },
 			python = { "isort", "black" },
 			sh = { "shfmt" },
+			markdown = { "prettier" },
 		},
 		log_level = vim.log.levels.INFO,
 		notify_on_error = true,

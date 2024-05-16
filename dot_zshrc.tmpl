@@ -79,5 +79,5 @@ eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 
 # fzf-sesh
-source ~/scripts/fzf-sesh/fzf-sesh.sh
-export FZF_SESH_REPLACE_SESH_CMD=true
+source ~/.local/share/fzf-sesh/bin/fzf-sesh
+export PATH=$PATH:$HOME/.local/share/fzf-sesh/bin
