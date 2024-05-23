@@ -8,4 +8,6 @@ return {
 			vim.fn["mkdp#util#install"]()
 		end,
 	},
+	-- Wakatime
+	"wakatime/vim-wakatime",
 }

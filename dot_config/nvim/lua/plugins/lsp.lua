@@ -58,6 +58,19 @@ return {
 							capabilities = capabilities,
 						})
 					end,
+
+					["rust_analyzer"] = function()
+						require("lspconfig").rust_analyzer.setup({
+							capabilities = capabilities,
+							settings = {
+								["rust-analyzer"] = {
+									check = {
+										command = "clippy",
+									},
+								},
+							},
+						})
+					end,
 				},
 			})
 		end,
