@@ -21,4 +21,7 @@ return {
 		priority = 1000,
 	},
 	"sainnhe/gruvbox-material",
+	"sainnhe/everforest",
+	"vague2k/vague.nvim",
+	"rebelot/kanagawa.nvim"
 }
