@@ -6,8 +6,8 @@ return {
 			{ "williamboman/mason.nvim", config = true },
 			"williamboman/mason-lspconfig.nvim",
 			-- neovim config support
-			{ "folke/neodev.nvim", config = true },
-			{ "j-hui/fidget.nvim", config = true },
+			{ "folke/neodev.nvim",       config = true },
+			{ "j-hui/fidget.nvim",       config = true },
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -29,7 +29,7 @@ return {
 					-- diagnostics
 					vim.diagnostic.config({
 						float = {
-							source = "always",
+							source = true
 						},
 					})
 					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
@@ -66,6 +66,12 @@ return {
 								["rust-analyzer"] = {
 									check = {
 										command = "clippy",
+										extraArgs = {
+											"--",
+											"-Wclippy::pedantic",
+											"-Aclippy::must_use_candidate",
+											"-Aclippy::missing_errors_doc",
+										},
 									},
 								},
 							},

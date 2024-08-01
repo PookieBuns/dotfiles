@@ -9,6 +9,8 @@ return {
 			python = { "isort", "black" },
 			sh = { "shfmt" },
 			markdown = { "prettier" },
+			json = { "prettier" },
+			toml = { "taplo" },
 		},
 		log_level = vim.log.levels.INFO,
 		notify_on_error = true,
