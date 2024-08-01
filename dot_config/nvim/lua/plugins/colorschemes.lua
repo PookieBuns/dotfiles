@@ -23,5 +23,6 @@ return {
 	"sainnhe/gruvbox-material",
 	"sainnhe/everforest",
 	"vague2k/vague.nvim",
-	"rebelot/kanagawa.nvim"
+	"rebelot/kanagawa.nvim",
+	"savq/melange",
 }
