@@ -10,6 +10,8 @@ return {
 			sh = { "shfmt" },
 			markdown = { "prettier" },
 			yaml = { "prettier" },
+			json = { "prettier" },
+			toml = { "taplo" },
 		},
 		log_level = vim.log.levels.INFO,
 		notify_on_error = true,

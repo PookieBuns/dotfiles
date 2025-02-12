@@ -38,7 +38,7 @@ return {
 	{
 		"ggandor/leap.nvim",
 		config = function()
-			vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leapforward)')
+			vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
 		end
 	}
 }
