@@ -12,10 +12,23 @@ return {
 	"wakatime/vim-wakatime",
 	{
 		"HakonHarnes/img-clip.nvim",
-		event = "VeryLazy",
 		keys = {
 			-- suggested keymap
 			{ "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+		},
+	},
+	-- clues
+	{
+		"echasnovski/mini.clue",
+		opts = {
+			triggers = {
+				-- Leader triggers
+				{ mode = "n", keys = "<Leader>" },
+				{ mode = "x", keys = "<Leader>" },
+				-- Surround triggers
+				{ mode = "n", keys = "s" },
+				{ mode = "x", keys = "s" },
+			},
 		},
 	},
 }

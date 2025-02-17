@@ -6,7 +6,7 @@ return {
 		-- Define your formatters
 		formatters_by_ft = {
 			lua = { "stylua" },
-			python = { "isort", "black" },
+			python = { "ruff_organize_imports", "ruff_format" },
 			sh = { "shfmt" },
 			markdown = { "prettier" },
 			yaml = { "prettier" },
@@ -18,22 +18,14 @@ return {
 	},
 	config = function(_, opts)
 		require("conform").setup(opts)
-		vim.api.nvim_create_user_command("Format", function(args)
-			local range = nil
-			if args.count ~= -1 then
-				local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-				range = {
-					start = { args.line1, 0 },
-					["end"] = { args.line2, end_line:len() },
-				}
-			end
-			local formatted = require("conform").format({ async = true, lsp_fallback = false, range = range })
+		vim.api.nvim_create_user_command("Format", function()
+			local formatted = require("conform").format()
 			if formatted then
-				print("Formatted with Conform")
+				vim.notify("Formatted with Conform", vim.log.levels.INFO)
 			else
-				print("Using LSP formatting")
+				vim.notify("Using LSP formatting", vim.log.levels.INFO)
 				vim.lsp.buf.format()
 			end
-		end, { range = true })
+		end, {})
 	end,
 }

@@ -1,28 +1,30 @@
 return {
 	-- comment
-	{ "numToStr/Comment.nvim", config = true },
+	{ "echasnovski/mini.comment", opts = {} },
 	-- auto detect shiftwidth and tabstop
 	"tpope/vim-sleuth",
 	-- surround
-	"tpope/vim-surround",
+	{ "echasnovski/mini.surround", opts = {} },
 	-- bracket closing
-	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		config = true,
-	},
+	{ "echasnovski/mini.pairs", opts = {} },
 	-- textobj
 	{
-		"kana/vim-textobj-entire",
-		dependencies = {
-			"kana/vim-textobj-user",
-		},
+		"echasnovski/mini.ai",
+		dependencies = { "echasnovski/mini.extra" },
+		opts = function()
+			return {
+				custom_textobjects = {
+					-- Select the entire buffer
+					e = require("mini.extra").gen_ai_spec.buffer(),
+				},
+			}
+		end,
 	},
 	-- undo tree
 	{
 		"mbbill/undotree",
 		keys = {
-			{ "<leader>u", "<cmd>UndotreeToggle<CR>" },
+			{ "<leader>u", "<cmd>UndotreeToggle<CR>", desc = "Undo tree" },
 		},
 		config = function()
 			vim.g.undotree_SetFocusWhenToggle = 1
