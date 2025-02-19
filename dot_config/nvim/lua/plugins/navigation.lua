@@ -13,7 +13,7 @@ return {
 			local files = require("mini.files")
 			files.setup(opts)
 			vim.keymap.set("n", "<leader>e", function()
-				files.open()
+				files.open(vim.api.nvim_buf_get_name(0))
 			end, { desc = "Files" })
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "MiniFilesBufferCreate",
