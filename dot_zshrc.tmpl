@@ -83,3 +83,8 @@ git() {
 
 # ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
+# start tmux if not already running
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+    sesh connect .
+fi

@@ -25,3 +25,8 @@ vim.keymap.set("n", "=", "za")
 -- Fat finger prevention
 vim.api.nvim_create_user_command("W", "w", {})
 vim.api.nvim_create_user_command("Q", "q", {})
+
+-- Difftool
+vim.keymap.set("n", "<leader>1", ":diffget LOCAL<CR>", { desc = "get LOCAL" })
+vim.keymap.set("n", "<leader>2", ":diffget BASE<CR>", { desc = "get BASE" })
+vim.keymap.set("n", "<leader>3", ":diffget REMOTE<CR>", { desc = "get REMOTE" })
