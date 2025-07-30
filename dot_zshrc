@@ -32,6 +32,7 @@ bindkey '3;5u' autosuggest-accept
 # for some reason tmux swallows the 3
 bindkey ';5u' autosuggest-accept
 bindkey ';5;13~' autosuggest-accept
+bindkey -M viins '^[[27;5;13~' autosuggest-accept
 
 # fzf
 eval "$(fzf --zsh)"
@@ -88,3 +89,15 @@ export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
     sesh connect .
 fi
+
+# zsh-vi-mode
+function zvm_config() {
+  ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+}
+
+source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+function zvm_after_lazy_keybindings() {
+  zvm_bindkey vicmd ' l' vi-end-of-line
+  zvm_bindkey vicmd ' h' vi-beginning-of-line
+}
