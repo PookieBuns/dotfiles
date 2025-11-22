@@ -8,41 +8,28 @@ return {
 				"williamboman/mason-lspconfig.nvim",
 				opts = {
 					ensure_installed = { "lua_ls", "rust_analyzer", "pyright" },
-					handlers = {
-						function(server_name) -- default handler (optional)
-							require("lspconfig")[server_name].setup({})
-						end,
-
-						["rust_analyzer"] = function()
-							require("lspconfig").rust_analyzer.setup({
-								settings = {
-									["rust-analyzer"] = {
-										check = {
-											command = "clippy",
-											-- extraArgs = {
-											-- 	"--",
-											-- 	"-Wclippy::pedantic",
-											-- 	"-Aclippy::must_use_candidate",
-											-- 	"-Aclippy::missing_errors_doc",
-											-- },
-										},
-										rustfmt = {
-											extraArgs = { "+nightly" },
-										},
-									},
-								},
-							})
-						end,
-					},
 				},
 			},
 			-- neovim config support
-			{ "folke/lazydev.nvim", opts = {} },
+			{ "folke/lazydev.nvim",      opts = {} },
 		},
 		config = function()
+			vim.lsp.config("rust_analyzer", {
+				settings = {
+					["rust-analyzer"] = {
+						check = {
+							command = "clippy",
+						},
+						rustfmt = {
+							extraArgs = { "+nightly" },
+						},
+					}
+				}
+			})
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 				callback = function(e)
+					vim.lsp.inlay_hint.enable(true)
 					vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
 						desc = "Go to definition",
 						buffer = e.buf,

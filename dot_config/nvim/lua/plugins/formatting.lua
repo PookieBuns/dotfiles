@@ -12,6 +12,7 @@ return {
 			yaml = { "prettier" },
 			json = { "prettier" },
 			toml = { "taplo" },
+			html = { "prettier" },
 		},
 		log_level = vim.log.levels.INFO,
 		notify_on_error = true,
