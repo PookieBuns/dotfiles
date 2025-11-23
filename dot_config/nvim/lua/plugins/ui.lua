@@ -1,6 +1,6 @@
 return {
 	-- icons
-	{ "echasnovski/mini.icons", opts = {} },
+	{ "echasnovski/mini.icons",      opts = {} },
 	-- Status Line
 	{ "echasnovski/mini.statusline", opts = {} },
 	-- Indent Line

@@ -10,11 +10,6 @@ vim.opt.scrolloff = 10
 -- lualine already shows mode
 vim.opt.showmode = false
 
--- Indentation
--- vim.opt.shiftwidth = 4
-vim.opt.tabstop = 4
--- vim.opt.expandtab = true
-
 -- Search
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
@@ -23,10 +18,9 @@ vim.opt.smartcase = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Undo
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
+vim.opt.backup = false
+vim.opt.writebackup = false
 
 -- Miscellaneous
 vim.opt.updatetime = 250
@@ -46,14 +40,13 @@ if vim.env.WSL_DISTRO_NAME then
     vim.g.clipboard = {
         name = 'win32yank-wsl',
         copy = {
-            ['+'] = {win32yank_path, '-i', '--crlf'},
-            ['*'] = {win32yank_path, '-i', '--crlf'},
+            ['+'] = { win32yank_path, '-i', '--crlf' },
+            ['*'] = { win32yank_path, '-i', '--crlf' },
         },
         paste = {
-            ['+'] = {win32yank_path, '-o', '--lf'},
-            ['*'] = {win32yank_path, '-o', '--lf'},
+            ['+'] = { win32yank_path, '-o', '--lf' },
+            ['*'] = { win32yank_path, '-o', '--lf' },
         },
         cache_enabled = 0,
     }
 end
-

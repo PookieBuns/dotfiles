@@ -2,7 +2,7 @@ return {
 	-- comment
 	{ "echasnovski/mini.comment", opts = {} },
 	-- auto detect shiftwidth and tabstop
-	"tpope/vim-sleuth",
+	"NMAC427/guess-indent.nvim",
 	-- surround
 	{ "echasnovski/mini.surround", opts = {} },
 	-- bracket closing
