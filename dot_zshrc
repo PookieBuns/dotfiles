@@ -28,10 +28,10 @@ SAVEHIST=10000
 # zsh-autosuggestions
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # this is the ctrl-enter binding
-bindkey '3;5u' autosuggest-accept
-# for some reason tmux swallows the 3
-bindkey ';5u' autosuggest-accept
-bindkey ';5;13~' autosuggest-accept
+# bindkey '3;5u' autosuggest-accept
+# # for some reason tmux swallows the 3
+# bindkey ';5u' autosuggest-accept
+# bindkey ';5;13~' autosuggest-accept
 bindkey -M viins '^[[27;5;13~' autosuggest-accept
 
 # fzf
