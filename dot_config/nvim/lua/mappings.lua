@@ -15,7 +15,6 @@ map_leader({ "n", "v", "o" }, "h", [[&wrap ? 'g^' : '^']], { expr = true })
 map_leader("n", "e", function()
 	require("mini.files").open(vim.api.nvim_buf_get_name(0))
 end)
-map_leader("n", "s", "<cmd>source<cr>")
 map_leader("n", "u", "<cmd>Undotree<cr>")
 -- Fat finger prevention
 vim.api.nvim_create_user_command("W", "w", {})
