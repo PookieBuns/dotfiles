@@ -1,0 +1,11 @@
+[user]
+	name = allenyuchen
+	email = yu-chen.ho@geniussports.com
+[push]
+	autoSetupRemote = true
+[credential]
+	helper = /usr/local/share/gcm-core/git-credential-manager
+[merge]
+	tool = nvimdiff
+[credential "https://dl.cloudsmith.io"]
+	provider = generic
