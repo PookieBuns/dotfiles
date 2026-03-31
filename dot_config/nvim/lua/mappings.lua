@@ -1,32 +1,40 @@
-vim.g.mapleader = " "
-vim.keymap.set("i", "jk", "<Esc>")
+local map = function(mode, lhs, rhs, opts)
+	vim.keymap.set(mode, lhs, rhs, opts)
+end
 
--- miscellaneous
-vim.keymap.set({ "n", "v", "o" }, "<leader>l", "$", { desc = "Move to end of line" })
-vim.keymap.set({ "n", "v", "o" }, "<leader>h", "^", { desc = "Move to beginning of line" })
-
--- Resize split windows using arrow keys by pressing:
--- CTRL+UP, CTRL+DOWN, CTRL+LEFT, or CTRL+RIGHT.
-vim.keymap.set("n", "<C-Up>", "<C-w>+")
-vim.keymap.set("n", "<C-Down>", "<C-w>-")
-vim.keymap.set("n", "<C-Left>", "<C-w><")
-vim.keymap.set("n", "<C-Right>", "<C-w>>")
-
--- Map previous and next buffers and tabs using [ and ]
-vim.keymap.set("n", "[b", vim.cmd.bprevious)
-vim.keymap.set("n", "]b", vim.cmd.bnext)
--- Map previous and next quickfix using [ and ]
-vim.keymap.set("n", "[q", vim.cmd.cprevious)
-vim.keymap.set("n", "]q", vim.cmd.cnext)
-
--- Enable folding with the equals sign
-vim.keymap.set("n", "=", "za")
-
+local map_leader = function(mode, suffix, rhs, opts)
+	vim.keymap.set(mode, "<Leader>" .. suffix, rhs, opts)
+end
+-- keymaps
+map("i", "jk", "<Esc>")
+map("n", "=", "za")
+map({ "n", "v" }, "j", [[v:count == 0 ? 'gj' : 'j']], { expr = true })
+map({ "n", "v" }, "k", [[v:count == 0 ? 'gk' : 'k']], { expr = true })
+map_leader({ "n", "v", "o" }, "l", [[&wrap ? 'g$' : '$']], { expr = true })
+map_leader({ "n", "v", "o" }, "h", [[&wrap ? 'g^' : '^']], { expr = true })
+map_leader("n", "e", function()
+	require("mini.files").open(vim.api.nvim_buf_get_name(0))
+end)
+map_leader("n", "s", "<cmd>source<cr>")
+map_leader("n", "u", "<cmd>Undotree<cr>")
 -- Fat finger prevention
 vim.api.nvim_create_user_command("W", "w", {})
 vim.api.nvim_create_user_command("Q", "q", {})
+vim.api.nvim_create_user_command("WQ", "wq", {})
+vim.api.nvim_create_user_command("Wq", "wq", {})
 
--- Difftool
-vim.keymap.set("n", "<leader>1", ":diffget LOCAL<CR>", { desc = "get LOCAL" })
-vim.keymap.set("n", "<leader>2", ":diffget BASE<CR>", { desc = "get BASE" })
-vim.keymap.set("n", "<leader>3", ":diffget REMOTE<CR>", { desc = "get REMOTE" })
+-- Plugin management
+vim.api.nvim_create_user_command("Plugins", function()
+	vim.pack.update(nil, { offline = true })
+end, {})
+vim.api.nvim_create_user_command("PluginsDelete", function()
+	local inactive = vim.iter(vim.pack.get())
+		:filter(function(x)
+			return not x.active
+		end)
+		:map(function(x)
+			return x.spec.name
+		end)
+		:totable()
+	vim.pack.del(inactive)
+end, {})

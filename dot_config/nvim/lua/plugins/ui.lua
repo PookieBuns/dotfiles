@@ -1,26 +1,23 @@
-return {
-	-- icons
-	{ "echasnovski/mini.icons", opts = {} },
-	-- Status Line
-	{ "echasnovski/mini.statusline", opts = {} },
-	-- Indent Line
-	{
-		"echasnovski/mini.indentscope",
-		opts = {
-			draw = {
-				animation = function()
-					return 0
-				end,
-			},
-		},
-	},
-	-- Notifications
-	{
-		"echasnovski/mini.notify",
-		opts = {},
-		config = function(_, opts)
-			require("mini.notify").setup(opts)
-			vim.notify = require("mini.notify").make_notify()
+-- icons
+require("mini.icons").setup()
+-- status line
+require("mini.statusline").setup()
+-- indent line
+require("mini.indentscope").setup({
+	draw = {
+		animation = function()
+			return 0
 		end,
 	},
-}
+})
+-- notifications
+require("mini.notify").setup()
+-- hlpatterns
+require("mini.hipatterns").setup({
+	highlighters = {
+		fixme = { pattern = "FIXME", group = "MiniHipatternsFixme" },
+		hack = { pattern = "HACK", group = "MiniHipatternsHack" },
+		todo = { pattern = "TODO", group = "MiniHipatternsTodo" },
+		note = { pattern = "NOTE", group = "MiniHipatternsNote" },
+	},
+})

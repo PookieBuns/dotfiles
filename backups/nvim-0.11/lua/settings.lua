@@ -19,6 +19,7 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Undo
 vim.opt.undofile = true
+vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
 

@@ -1,72 +1,33 @@
-return {
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			-- Automatically install LSPs and related tools to stdpath for Neovim
-			{ "williamboman/mason.nvim", opts = {} },
-			{
-				"williamboman/mason-lspconfig.nvim",
-				opts = {
-					ensure_installed = { "lua_ls", "rust_analyzer", "pyright" },
-				},
+vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
+	callback = function(ev)
+		local opts = { buffer = ev.buf }
+		vim.lsp.inlay_hint.enable(true)
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+		vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
+		vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+		vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+		vim.diagnostic.config({
+			virtual_text = true,
+			float = {
+				source = true,
 			},
-			-- neovim config support
-			{ "folke/lazydev.nvim",      opts = {} },
-		},
-		config = function()
-			vim.lsp.config("rust_analyzer", {
-				settings = {
-					["rust-analyzer"] = {
-						check = {
-							command = "clippy",
-						},
-						rustfmt = {
-							extraArgs = { "+nightly" },
-						},
-					}
-				}
-			})
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
-				callback = function(e)
-					local client = vim.lsp.get_client_by_id(e.data.client_id)
-					local buf = e.buf
-
-					vim.lsp.inlay_hint.enable(true)
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
-						desc = "Go to definition",
-						buffer = e.buf,
-					})
-					vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Show hover", buffer = buf })
-					vim.keymap.set(
-						"i",
-						"<C-h>",
-						vim.lsp.buf.signature_help,
-						{ desc = "Show signature help", buffer = e.buf }
-					)
-					vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action", buffer = buf })
-					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename", buffer = buf })
-					-- diagnostics
-					vim.diagnostic.config({
-						float = {
-							source = true,
-						},
-					})
-					vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic", buffer = buf })
-					vim.keymap.set(
-						"n",
-						"[d",
-						vim.diagnostic.goto_prev,
-						{ desc = "Previous diagnostic", buffer = buf }
-					)
-					vim.keymap.set(
-						"n",
-						"<leader>d",
-						vim.diagnostic.setqflist,
-						{ desc = "Show diagnostics", buffer = buf }
-					)
-				end,
-			})
-		end,
-	},
-}
+			update_in_insert = false,
+		})
+		vim.keymap.set("n", "]d", function()
+			vim.diagnostic.jump({ count = 1, float = true })
+		end, opts)
+		vim.keymap.set("n", "[d", function()
+			vim.diagnostic.jump({ count = -1, float = true })
+		end, opts)
+		vim.api.nvim_create_user_command("InlayHints", function()
+			vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+		end, {})
+	end,
+})
+vim.lsp.enable({
+	"rust_analyzer",
+	"lua_ls",
+})

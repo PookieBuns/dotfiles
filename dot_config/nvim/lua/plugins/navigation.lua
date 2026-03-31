@@ -1,31 +1,10 @@
-return {
-	-- tmux integration
-	"christoomey/vim-tmux-navigator",
-	-- File Explorer
-	{
-		"echasnovski/mini.files",
-		opts = {
-			mappings = {
-				go_in_plus = "<CR>",
-			},
-		},
-		config = function(_, opts)
-			local files = require("mini.files")
-			files.setup(opts)
-			vim.keymap.set("n", "<leader>e", function()
-				files.open(vim.api.nvim_buf_get_name(0))
-			end, { desc = "Files" })
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "MiniFilesBufferCreate",
-				callback = function(args)
-					local map_buf = function(lhs, rhs)
-						vim.keymap.set("n", lhs, rhs, { buffer = args.data.buf_id })
-					end
-					map_buf("<Esc>", MiniFiles.close)
-				end,
-			})
-		end,
+require("mini.files").setup({
+	mappings = {
+		go_in_plus = "<CR>",
+		close = "<ESC>",
 	},
-	-- motions
-	{ "echasnovski/mini.jump", opts = {} },
-}
+})
+
+require("mini.jump").setup()
+
+vim.pack.add({ "https://github.com/christoomey/vim-tmux-navigator" })

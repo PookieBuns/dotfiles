@@ -1,0 +1,16 @@
+vim.cmd("packadd nvim.undotree")
+
+vim.pack.add({ "https://github.com/nvim-mini/mini.nvim" })
+
+require("plugins.colorscheme")
+require("plugins.navigation")
+require("plugins.treesitter")
+require("plugins.editing")
+require("plugins.formatting")
+require("plugins.ai")
+require("plugins.picker")
+require("plugins.ui")
+require("plugins.git")
+require("plugins.lsp")
+require("plugins.autocomplete")
+require("plugins.markdown")

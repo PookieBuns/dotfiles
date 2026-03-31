@@ -1,55 +1,24 @@
-return {
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		opts = {
-			ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python", "rust" },
+vim.pack.add({ "https://github.com/snvim-treesitter/nvim-treesitter" })
 
-			-- Install parsers synchronously (only applied to `ensure_installed`)
-			sync_install = false,
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function(args)
+		local filetype = args.match
 
-			-- Automatically install missing parsers when entering buffer
-			-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-			auto_install = true,
+		local language = vim.treesitter.language.get_lang(filetype)
+		if not language then
+			return
+		end
 
-			-- List of parsers to ignore installing (for "all")
-			ignore_install = { "latex" },
-
-			---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-			-- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
-			highlight = {
-				enable = true,
-
-				-- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-				disable = function(lang, buf)
-					local max_filesize = 100 * 1024 -- 100 KB
-					local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-					if ok and stats and stats.size > max_filesize then
-						return true
-					end
-				end,
-
-				-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-				-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-				-- Using this option may slow down your editor, and you may see some duplicate highlights.
-				-- Instead of true it can also be a list of languages
-				additional_vim_regex_highlighting = false,
-			},
-
-			-- tsx ftplugin does not exist so it doesn't turn on smartindent
-			indent = {
-				enable = true,
-				disable = {},
-			},
-		},
-		config = function(_, opts)
-			require("nvim-treesitter.configs").setup(opts)
-			vim.opt.foldmethod = "expr"
-			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-			vim.opt.foldenable = false
-		end,
-	},
-	-- Context
-	"nvim-treesitter/nvim-treesitter-context",
-}
+		-- check if parser exists and load it
+		if not vim.treesitter.language.add(language) then
+			return
+		end
+		-- syntax highlighting, provided by Neovim
+		vim.treesitter.start()
+		-- folds, provided by Neovim
+		vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		vim.wo.foldmethod = "expr"
+		-- indentation, provided by nvim-treesitter
+		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	end,
+})

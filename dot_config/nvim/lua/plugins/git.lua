@@ -1,90 +1,52 @@
-return {
-	-- git commands
-	{
-		"tpope/vim-fugitive",
-		dependencies = {
-			"MunifTanjim/nui.nvim",
-		},
-		config = function()
-			local Popup = require("nui.popup")
-			local event = require("nui.utils.autocmd").event
-			local popup = Popup({
-				enter = true,
-				focusable = true,
-				border = {
-					style = "rounded",
-				},
-				position = "50%",
-				size = {
-					width = "80%",
-					height = "60%",
-				},
-			})
-			local function get_git_index_file()
-				local git_dir = vim.fn.systemlist("git rev-parse --git-dir")[1]
-				if vim.v.shell_error ~= 0 then
-					return nil, "Not a git repository"
-				end
-				local index_file = git_dir .. "/index"
-				return index_file, nil
-			end
-			vim.api.nvim_create_user_command("G", function()
-				local index_file, err = get_git_index_file()
-				if err ~= nil then
-					vim.notify("Error: " .. err, vim.log.levels.ERROR)
-					return
-				end
-				popup:mount()
-				vim.cmd("edit " .. index_file)
-				-- unmount component when cursor leaves buffer
-				popup:on(event.BufLeave, function()
-					popup:unmount()
-				end)
-			end, {})
-		end,
-	},
-	{
-		"echasnovski/mini.diff",
-		opts = {
-			view = {
-				style = "sign",
-				signs = {
-					add = "▎",
-					change = "▎",
-					delete = "",
-				},
-			},
-			mappings = {
-				-- Apply hunks inside a visual/operator region
-				apply = "<leader>gh",
+vim.pack.add({ "https://github.com/tpope/vim-fugitive" })
+vim.api.nvim_create_user_command("G", function()
+	local height = math.floor(0.618 * vim.o.lines)
+	local width = math.floor(0.618 * vim.o.columns)
+	local win = vim.api.nvim_open_win(0, true, {
+		relative = "win",
+		anchor = "NW",
+		style = "minimal",
+		height = height,
+		width = width,
+		row = math.floor(0.5 * (vim.o.lines - height)),
+		col = math.floor(0.5 * (vim.o.columns - width)),
+	})
+	vim.cmd("Gedit :")
+	-- unmount component when cursor leaves buffer
+	local buf = vim.api.nvim_get_current_buf()
+	local close_window = function()
+		if vim.api.nvim_win_is_valid(win) then
+			vim.api.nvim_win_close(win, true)
+		end
+	end
+	vim.api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
+		buffer = buf,
+		once = true,
+		callback = close_window,
+	})
+	vim.keymap.set("n", "<Esc>", close_window, { buffer = buf })
+end, {})
 
-				-- Reset hunks inside a visual/operator region
-				reset = "<leader>gH",
+require("mini.diff").setup({
 
-				-- Hunk range textobject to be used inside operator
-				-- Works also in Visual mode if mapping differs from apply and reset
-				textobject = "gh",
+	view = {
+		style = "sign",
+	},
+	mappings = {
+		-- Apply hunks inside a visual/operator region
+		apply = "<leader>gh",
 
-				-- Go to hunk range in corresponding direction
-				goto_first = "[C",
-				goto_prev = "[c",
-				goto_next = "]c",
-				goto_last = "]C",
-			},
-		},
-		config = function(_, opts)
-			require("mini.diff").setup(opts)
-			vim.keymap.set("n", "<leader>go", function()
-				require("mini.diff").toggle_overlay(0)
-			end, { desc = "Toggle mini.diff overlay" })
-		end,
+		-- Reset hunks inside a visual/operator region
+		reset = "<leader>gH",
+
+		-- Hunk range textobject to be used inside operator
+		-- Works also in Visual mode if mapping differs from apply and reset
+		textobject = "gh",
+
+		-- Go to hunk range in corresponding direction
+		goto_first = "[C",
+		goto_prev = "[c",
+		goto_next = "]c",
+		goto_last = "]C",
 	},
-	{
-		"rbong/vim-flog",
-		lazy = true,
-		cmd = { "Flog", "Flogsplit", "Floggit" },
-		dependencies = {
-			"tpope/vim-fugitive",
-		},
-	},
-}
+})
