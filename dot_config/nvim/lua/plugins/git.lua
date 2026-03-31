@@ -39,10 +39,6 @@ require("mini.diff").setup({
 		-- Reset hunks inside a visual/operator region
 		reset = "<leader>gH",
 
-		-- Hunk range textobject to be used inside operator
-		-- Works also in Visual mode if mapping differs from apply and reset
-		textobject = "gh",
-
 		-- Go to hunk range in corresponding direction
 		goto_first = "[C",
 		goto_prev = "[c",

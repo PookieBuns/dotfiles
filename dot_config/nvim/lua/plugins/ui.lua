@@ -1,7 +1,9 @@
 -- icons
 require("mini.icons").setup()
+
 -- status line
 require("mini.statusline").setup()
+
 -- indent line
 require("mini.indentscope").setup({
 	draw = {
@@ -10,8 +12,10 @@ require("mini.indentscope").setup({
 		end,
 	},
 })
+
 -- notifications
 require("mini.notify").setup()
+
 -- hlpatterns
 require("mini.hipatterns").setup({
 	highlighters = {

@@ -1,5 +1,4 @@
 vim.pack.add({ "https://github.com/snvim-treesitter/nvim-treesitter" })
-
 vim.api.nvim_create_autocmd("FileType", {
 	callback = function(args)
 		local filetype = args.match
